@@ -3,11 +3,15 @@
                     xmlns:charts="clr-namespace:Neoxio.Charts">
 
 
+    <charts:SideThicknessConverter x:Key="SideThicknessConverter"/>
+
     <Style TargetType="{x:Type charts:Timeline}">
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="Padding" Value="20,10"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <Canvas Height="30"/>
+                    <Canvas IsItemsHost="True"/>
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -18,7 +22,9 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <Canvas x:Name="PART_ScaleLine" Height="30">
+                            <!-- Sizing border -->
+                            <Border MinHeight="{TemplateBinding MinHeight}" Margin="{TemplateBinding Padding}"/>
+                            <Canvas x:Name="PART_ScaleLine" >
                                 <Canvas.Resources>
                                     <Style TargetType="Rectangle">
                                         <Setter Property="Fill" Value="Black"/>
@@ -26,8 +32,7 @@
                                 </Canvas.Resources>
                             </Canvas>
                             <charts:HorizontalScrollViewer x:Name="PART_LineScroller"
-                                          Padding="0,0,0,10"
-                                          HorizontalScrollBarVisibility="Hidden"
+                                          HorizontalScrollBarVisibility="Auto"
                                           VerticalScrollBarVisibility="Disabled">
                                 <charts:HorizontalScrollViewer.Template>
                                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -48,7 +53,7 @@
                                     </ControlTemplate>
                                 </charts:HorizontalScrollViewer.Template>
                                 <Grid>
-                                    <Canvas x:Name="PART_ScrollerContent" Margin="20,0" Height="30">
+                                    <Canvas x:Name="PART_ScrollerContent" Margin="{TemplateBinding Padding, Converter={StaticResource SideThicknessConverter}}">
                                         <ItemsPresenter x:Name="PART_ItemsPresenter" />
                                     </Canvas>
                                 </Grid>

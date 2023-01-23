@@ -100,7 +100,7 @@ namespace Neoxio.Charts
         private bool _ignoreGraduationsUpdates = false;
         private bool _invalidTimeUnit = false;
         private bool _controlTemplateIsValid = false;
-        private UIElement _currentDateVisual;
+        private FrameworkElement _currentDateVisual;
 
         /// <summary>
         /// Gets or sets the prefered unit of time that a segment of line should represent on the timeline.
@@ -448,7 +448,7 @@ namespace Neoxio.Charts
             }
 
             Canvas.SetLeft(timeLineItem, leftOffset - (itemWidth - TimeTickWidth) / 2);
-            Canvas.SetTop(timeLineItem, TimeTickHeight - itemHeight / 2);
+            Canvas.SetTop(timeLineItem, (TimeTickHeight - itemHeight) / 2 + Padding.Top);
         }
 
         /// <inheritdoc />
@@ -563,7 +563,7 @@ namespace Neoxio.Charts
         /// </summary>
         /// <returns>Visual representation of the current date.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private UIElement GetCurrentDateVisual()
+        private FrameworkElement GetCurrentDateVisual()
         {
             var rect = new Rectangle
             {
@@ -665,6 +665,7 @@ namespace Neoxio.Charts
                 double minutesToSpread = (lineEndDate - lineStartDate).TotalMinutes;
                 double leftOffset = _scrollerContent.ActualWidth * currentMinutes / minutesToSpread;
                 Canvas.SetLeft(_currentDateVisual, leftOffset);
+                Canvas.SetTop(_currentDateVisual, (TimeTickHeight - _currentDateVisual.ActualHeight) / 2 + Padding.Top);
             }
             else
             {
@@ -773,7 +774,7 @@ namespace Neoxio.Charts
             GetScrollInfo(size, out double parentOffsetLeft, out double parentWidth);
             _scaleLine.Clip = new RectangleGeometry()
             {
-                Rect = new Rect(0, 0, _scrollViewer.ActualWidth, _scaleLine.Height)
+                Rect = new Rect(0, 0, _scrollViewer.ActualWidth, _scaleLine.ActualHeight)
             };
 
             // Draw horizontal line
@@ -787,7 +788,7 @@ namespace Neoxio.Charts
             }
 
             Rectangle line = new Rectangle() { Width = lineWidth, Height = 1 };
-            Canvas.SetTop(line, 4.5);
+            Canvas.SetTop(line, (TimeTickHeight - 1) / 2 + Padding.Top);
             Canvas.SetLeft(line, parentOffsetLeft + lineLeftOffset);
             _scaleLine.Children.Add(line);
 
@@ -795,7 +796,8 @@ namespace Neoxio.Charts
             var tick = GetTimeTick();
             var txt = GetText(lineStartDate);
             Canvas.SetLeft(tick, parentOffsetLeft);
-            Canvas.SetTop(txt, 10);
+            Canvas.SetTop(tick, Padding.Top);
+            Canvas.SetTop(txt, TimeTickHeight + Padding.Top);
             Canvas.SetLeft(txt, parentOffsetLeft - TimeLegendMidSize);
             _scaleLine.Children.Add(tick);
             _scaleLine.Children.Add(txt);
@@ -834,8 +836,9 @@ namespace Neoxio.Charts
                 tick = GetTimeTick();
                 txt = GetText(date);
                 Canvas.SetLeft(tick, parentOffsetLeft + decalageLeft);
+                Canvas.SetTop(tick, Padding.Top);
                 Canvas.SetLeft(txt, parentOffsetLeft + decalageLeft - TimeLegendMidSize);
-                Canvas.SetTop(txt, 10);
+                Canvas.SetTop(txt, TimeTickHeight + Padding.Top);
                 _scaleLine.Children.Add(tick);
                 _scaleLine.Children.Add(txt);
             }
@@ -843,7 +846,8 @@ namespace Neoxio.Charts
             // End date
             tick = GetTimeTick();
             txt = GetText(lineEndDate);
-            Canvas.SetTop(txt, 10);
+            Canvas.SetTop(txt, TimeTickHeight + Padding.Top);
+            Canvas.SetTop(tick, Padding.Top);
             Canvas.SetLeft(tick, parentOffsetLeft + size.Width - TimeTickWidth);
             Canvas.SetLeft(txt, parentOffsetLeft + size.Width - TimeLegendMidSize);
             _scaleLine.Children.Add(tick);
