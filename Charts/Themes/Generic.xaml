@@ -8,6 +8,8 @@
     <Style TargetType="{x:Type charts:Timeline}">
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Padding" Value="20,10"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -32,7 +34,7 @@
                                 </Canvas.Resources>
                             </Canvas>
                             <charts:HorizontalScrollViewer x:Name="PART_LineScroller"
-                                          HorizontalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                           VerticalScrollBarVisibility="Disabled">
                                 <charts:HorizontalScrollViewer.Template>
                                     <ControlTemplate TargetType="{x:Type ScrollViewer}">

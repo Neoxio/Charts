@@ -73,17 +73,29 @@ namespace Neoxio.Charts
                 new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnFlyoutTemplateChanged))
         );
 
+        /// <summary>
+        /// Identifies the <see cref="DateFormat"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DateFormatProperty = DependencyProperty.Register(
+                nameof(DateFormat),
+                typeof(string),
+                typeof(Timeline),
+                new FrameworkPropertyMetadata("{0:HH':'mm}", new PropertyChangedCallback(OnDateFormatChanged))
+        );
+
         #endregion
 
         private const double MaxCanvasSize = 16 * 1e6;
-        private const double DesiredChunkSize = 60;
         private const double MinMinuteUnit = 1;
+        private const double MouseFlyoutOffset = 5;
+
         private const double TimeTickWidth = 1;
         private const double TimeTickHeight = 10;
-        private const double TimeLegendSize = 28;
-        private const double TimeLegendMidSize = TimeLegendSize / 2.0;
-        private const double DisplayToleranceOnSides = DesiredChunkSize * 4;
-        private const double MouseFlyoutOffset = 5;
+        private double TimeLegendSize { get; set; }
+        private double TimeLegendMidSize { get { return TimeLegendSize / 2.0; } } 
+        private double DesiredChunkSize  { get { return Math.Max(TimeLegendSize + 30, 60); } }
+        private double DisplayToleranceOnSides { get { return DesiredChunkSize * 4; } }
+
 
         private static DataTemplateSelector DefaultTemplateSelector = new DefaultTimelineTemplateSelector();
 
@@ -162,6 +174,16 @@ namespace Neoxio.Charts
         }
 
         /// <summary>
+        /// Gets or sets the format that is used for each date along the timeline.
+        /// </summary>
+        /// <remarks>Format usage : string.Format(FORMAT, date)</remarks>
+        public string DateFormat
+        {
+            get { return (string)GetValue(DateFormatProperty); }
+            set { SetValue(DateFormatProperty, value); }
+        }
+
+        /// <summary>
         /// Indicates whether zoom is enabled on this timeline.
         /// </summary>
         public bool IsZoomEnabled { get; set; }
@@ -193,6 +215,8 @@ namespace Neoxio.Charts
                 }
             }
         }
+
+        public TimeLineItemVisualSelector ItemVisualSelector { get; set; }
 
         /// <summary>
         /// Intializes a new instance of the <see cref="Timeline"/> class.
@@ -263,6 +287,13 @@ namespace Neoxio.Charts
         {
             var timeline = (Timeline)d;
             timeline.OnFlyoutTemplateChanged((DataTemplate)e.OldValue, (DataTemplate)e.NewValue);
+        }
+
+        private static void OnDateFormatChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var timeline = (Timeline)d;
+            timeline.ComputeLegendSize();
+            timeline.ComputeWidthForCurrentTimeUnit();
         }
 
         #endregion
@@ -411,6 +442,14 @@ namespace Neoxio.Charts
             _flyout.VerticalOffset = -1 * (e.NewSize.Height + MouseFlyoutOffset);
         }
 
+        private void ComputeLegendSize()
+        {
+            string s = string.Format(DateFormat, DateTime.MaxValue);
+            var legend = new TextBlock() { Text = s, FontSize = FontSize };
+            legend.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            TimeLegendSize = legend.DesiredSize.Width;
+        }
+
         /// <summary>
         /// Sets the position of a given item on the timeline.
         /// </summary>
@@ -489,6 +528,10 @@ namespace Neoxio.Charts
                     _scrollerContent.Children.Add(_currentDateVisual);
                 }
             }
+            if (TimeLegendSize == 0)
+            {
+                ComputeLegendSize();
+            }
 
             ComputeWidthForCurrentTimeUnit();
         }
@@ -553,8 +596,7 @@ namespace Neoxio.Charts
         {
             return new TextBlock()
             {
-                Text = $"{date.Hour.ToString("D2")}h{date.Minute.ToString("D2")}",
-                FontSize = 10
+                Text = string.Format(DateFormat, date)
             };
         }
 
