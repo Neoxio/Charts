@@ -26,13 +26,7 @@
                         <Grid>
                             <!-- Sizing border -->
                             <Border MinHeight="{TemplateBinding MinHeight}" Margin="{TemplateBinding Padding}"/>
-                            <Canvas x:Name="PART_ScaleLine" >
-                                <Canvas.Resources>
-                                    <Style TargetType="Rectangle">
-                                        <Setter Property="Fill" Value="Black"/>
-                                    </Style>
-                                </Canvas.Resources>
-                            </Canvas>
+                            <Canvas x:Name="PART_ScaleLine" />
                             <charts:HorizontalScrollViewer x:Name="PART_LineScroller"
                                           HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                           VerticalScrollBarVisibility="Disabled">

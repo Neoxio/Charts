@@ -223,9 +223,14 @@ namespace Neoxio.Charts
         /// </summary>
         public Timeline()
         {
-            DefaultStyleKey = typeof(Timeline);
             _flyoutContent = new ContentControl();
             SizeChanged += OnSizeChanged;
+        }
+
+        static Timeline()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata(typeof(Timeline)));
+            ForegroundProperty.OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata(OnForegroundChanged));
         }
 
         #region On dependency property updates
@@ -250,6 +255,7 @@ namespace Neoxio.Charts
             {
                 timeline._ignoreGraduationsUpdates = false;
             }
+            timeline.UpdateItemsPosition();
             timeline.ComputeGraduations(new Size(timeline._scrollerContent.ActualWidth, timeline._scrollerContent.ActualHeight));
         }
 
@@ -294,6 +300,14 @@ namespace Neoxio.Charts
             var timeline = (Timeline)d;
             timeline.ComputeLegendSize();
             timeline.ComputeWidthForCurrentTimeUnit();
+        }
+
+        private static void OnForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var timeline = (Timeline)d;
+            if (!timeline._controlTemplateIsValid)
+                return;
+            timeline.ComputeGraduations(new Size(timeline._scrollerContent.ActualWidth, timeline._scrollerContent.ActualHeight));
         }
 
         #endregion
@@ -350,11 +364,11 @@ namespace Neoxio.Charts
             }
 
             timelineItem.ParentTimeline = this;
+            timelineItem.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             if (_controlTemplateIsValid && StartDate.HasValue && EndDate.HasValue && StartDate.Value < EndDate.Value)
             {
                 DateTime lineStartDate = FloorDate(StartDate.Value);
                 DateTime lineEndDate = CeilingDate(EndDate.Value);
-                timelineItem.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 SetPositionForItem(timelineItem, timelineItem.DesiredSize.Width, timelineItem.DesiredSize.Height, lineStartDate, lineEndDate);
             }
         }
@@ -583,6 +597,7 @@ namespace Neoxio.Charts
             {
                 Width = TimeTickWidth,
                 Height = TimeTickHeight,
+                Fill = Foreground
             };
         }
 
@@ -760,7 +775,7 @@ namespace Neoxio.Charts
         /// </summary>
         private void UpdateItemsPosition()
         {
-            if (!StartDate.HasValue || !EndDate.HasValue || StartDate.Value > EndDate.Value)
+            if (_ignoreGraduationsUpdates || !StartDate.HasValue || !EndDate.HasValue || StartDate.Value > EndDate.Value)
             {
                 return;
             }
@@ -772,7 +787,7 @@ namespace Neoxio.Charts
             {
                 foreach (TimelineItem timeLineItem in itemsPanel.Children)
                 {
-                    SetPositionForItem(timeLineItem, timeLineItem.ActualWidth, timeLineItem.ActualHeight, lineStartDate, lineEndDate);
+                    SetPositionForItem(timeLineItem, timeLineItem.DesiredSize.Width, timeLineItem.DesiredSize.Height, lineStartDate, lineEndDate);
                 }
             }
         }
@@ -829,7 +844,7 @@ namespace Neoxio.Charts
                 //lineWidth -= lineWidth + lineLeftOffset - size.Width;
             }
 
-            Rectangle line = new Rectangle() { Width = lineWidth, Height = 1 };
+            Rectangle line = new Rectangle() { Width = lineWidth, Height = 1, Fill = Foreground };
             Canvas.SetTop(line, (TimeTickHeight - 1) / 2 + Padding.Top);
             Canvas.SetLeft(line, parentOffsetLeft + lineLeftOffset);
             _scaleLine.Children.Add(line);
