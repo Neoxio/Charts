@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{9A4EF718-C61D-49BB-A032-5A294DC8FFFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimelineSample", "Samples\TimelineSample\TimelineSample.csproj", "{18CDB400-CACA-4624-8A4E-321CF9D07BF4}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neoxio.Charts", "Charts\Neoxio.Charts.csproj", "{62196BD3-3882-4336-A2F7-474933D50232}"
 EndProject
 Global
@@ -15,9 +19,16 @@ Global
 		{62196BD3-3882-4336-A2F7-474933D50232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62196BD3-3882-4336-A2F7-474933D50232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62196BD3-3882-4336-A2F7-474933D50232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18CDB400-CACA-4624-8A4E-321CF9D07BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18CDB400-CACA-4624-8A4E-321CF9D07BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18CDB400-CACA-4624-8A4E-321CF9D07BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18CDB400-CACA-4624-8A4E-321CF9D07BF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{18CDB400-CACA-4624-8A4E-321CF9D07BF4} = {9A4EF718-C61D-49BB-A032-5A294DC8FFFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {883DE41C-E748-4B5F-BC08-6B5E84F65EC0}

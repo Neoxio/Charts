@@ -1,0 +1,130 @@
+﻿<Window x:Class="TimelineSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimelineSample"
+        xmlns:charts="clr-namespace:Neoxio.Charts;assembly=Neoxio.Charts"
+        mc:Ignorable="d"
+        Title="Sample"
+        Height="600" Width="900">
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            
+            <TextBlock Margin="10,10,10,0" Text="ItemsSource binding + Flyout template" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="{Binding StartDate, Mode=OneWay}"
+                                      EndDate="{Binding EndDate, Mode=OneWay}"
+                                      CurrentDate="{Binding CurrentDate, Mode=OneWay}"
+                                      EventDateBinding="{Binding Time, Mode=OneTime}"
+                                      EventDurationBinding="{Binding Duration, Mode=OneWay}"
+                                      TimeUnit="00:01:00"
+                                      ItemsSource="{Binding TimeEvents}">
+                <charts:Timeline.FlyoutTemplate>
+                    <DataTemplate>
+                        <Border Padding="10,3"
+                            Background="WhiteSmoke"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <TextBlock Text="{Binding Time, FallbackValue=Failed}"/>
+                        </Border>
+                    </DataTemplate>
+                </charts:Timeline.FlyoutTemplate>
+            </charts:Timeline>
+
+            <TextBlock Margin="10,10,10,0" Text="Zoom enabled (Ctrl + scroll)" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="{Binding StartDate, Mode=OneWay}"
+                                      EndDate="{Binding EndDate, Mode=OneWay}"
+                                      CurrentDate="{Binding CurrentDate, Mode=OneWay}"
+                                      EventDateBinding="{Binding Time, Mode=OneTime}"
+                                      EventDurationBinding="{Binding Duration, Mode=OneWay}"
+                                      TimeUnit="00:05:00"
+                                      IsZoomEnabled="True"
+                                      ItemsSource="{Binding TimeEvents}">
+                <charts:Timeline.FlyoutTemplate>
+                    <DataTemplate>
+                        <Border Padding="10,3"
+                            Background="WhiteSmoke"
+                            BorderBrush="Black"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <TextBlock Text="{Binding Time, FallbackValue=Failed}"/>
+                        </Border>
+                    </DataTemplate>
+                </charts:Timeline.FlyoutTemplate>
+            </charts:Timeline>
+
+            <TextBlock Margin="10,10,10,0" Text="Static timeline with date format" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="08/19/2023 20:00"
+                             EndDate="08/19/2023 20:30"
+                             DateFormat="{}{0:d}&#x0a;{0:HH:mm}"
+                             Padding="30,10,30,20">
+                <charts:TimelineItem EventDate="08/19/2023 20:03">
+                    <Rectangle Width="7" Height="7" Fill="Red"/>
+                </charts:TimelineItem>
+                <charts:TimelineItem EventDate="08/19/2023 20:15">
+                    <Ellipse Width="7" Height="7" Fill="Green"/>
+                </charts:TimelineItem>
+                <charts:TimelineItem EventDate="08/19/2023 20:22">
+                    <Polygon Points="0,10 5,0 10,10"
+                             Fill="DarkOrange"
+                             StrokeThickness="1"
+                             Stroke="Black"/>
+                </charts:TimelineItem>
+                <charts:TimelineItem EventDate="08/19/2023 20:26">
+                    <Ellipse Width="7" Height="12" Fill="Blue"/>
+                </charts:TimelineItem>
+            </charts:Timeline>
+
+            <TextBlock Margin="10,10,10,0" Text="Forced time unit = 5min" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="08/19/2023 20:00"
+                             EndDate="08/19/2023 20:30"
+                             TimeUnit="00:05:00">
+                <charts:TimelineItem EventDate="08/19/2023 20:03">
+                    <Rectangle Width="7" Height="7" Fill="Red"/>
+                </charts:TimelineItem>
+                <charts:TimelineItem EventDate="08/19/2023 20:15">
+                    <Ellipse Width="7" Height="7" Fill="Green"/>
+                </charts:TimelineItem>
+                <charts:TimelineItem EventDate="08/19/2023 20:22">
+                    <Polygon Points="0,10 5,0 10,10"
+                             Fill="DarkOrange"
+                             StrokeThickness="1"
+                             Stroke="Black"/>
+                </charts:TimelineItem>
+                <charts:TimelineItem EventDate="08/19/2023 20:26">
+                    <Ellipse Width="7" Height="12" Fill="Blue"/>
+                </charts:TimelineItem>
+            </charts:Timeline>
+
+            <TextBlock Margin="10,10,10,0" Text="Scrollbar visible + zoom enabled" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="{Binding StartDate, Mode=OneWay}"
+                             EndDate="{Binding EndDate, Mode=OneWay}"
+                             TimeUnit="00:01:00"
+                             IsZoomEnabled="True"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            </charts:Timeline>
+
+            <TextBlock Margin="10,10,10,0" Text="3min moving" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="{Binding StartDate, Mode=OneWay}"
+                             EndDate="{Binding EndDate, Mode=OneWay}"
+                             TimeUnit="00:01:00">
+                <charts:TimelineItem EventDate="{Binding CurrentDate, Mode=OneWay}"  EventDuration="00:03:00">
+                    <Border Background="#99FF0000" Height="10"/>
+                </charts:TimelineItem>
+            </charts:Timeline>
+
+            <TextBlock Margin="10,10,10,0" Text="Changing duration" FontWeight="DemiBold"/>
+            <charts:Timeline StartDate="{Binding StartDate, Mode=OneWay}"
+                             EndDate="{Binding EndDate, Mode=OneWay}"
+                             TimeUnit="00:02:00">
+                <charts:TimelineItem EventDate="{Binding PulsingEvent.Time, Mode=OneWay}"
+                                     EventDuration="{Binding PulsingEvent.Duration, Mode=OneWay}">
+                    <Border Background="#990000FF" Height="10"/>
+                </charts:TimelineItem>
+            </charts:Timeline>
+        </StackPanel>
+    </ScrollViewer>
+    
+</Window>
