@@ -299,7 +299,10 @@ namespace Neoxio.Charts
         {
             var timeline = (Timeline)d;
             timeline.ComputeLegendSize();
-            timeline.ComputeWidthForCurrentTimeUnit();
+            if (timeline._controlTemplateIsValid)
+            {
+                timeline.ComputeGraduations(new Size(timeline._scrollerContent.ActualWidth, timeline._scrollerContent.ActualHeight));
+            }
         }
 
         private static void OnForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -496,8 +499,8 @@ namespace Neoxio.Charts
             {
                 itemWidth = 0;//Ignore width
                 double rightOffset = (time.Add(timeLineItem.EventDuration.Value) - lineStartDate).TotalMinutes * (_scrollerContent.ActualWidth) / range;
-                timeLineItem.Width = rightOffset - leftOffset;
-                timeLineItem.MaxWidth = rightOffset - leftOffset;
+                timeLineItem.Width = Math.Max(1, rightOffset - leftOffset);
+                timeLineItem.MaxWidth = Math.Max(1, rightOffset - leftOffset);
             }
 
             Canvas.SetLeft(timeLineItem, leftOffset - (itemWidth - TimeTickWidth) / 2);
