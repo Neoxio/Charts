@@ -216,8 +216,6 @@ namespace Neoxio.Charts
             }
         }
 
-        public TimeLineItemVisualSelector ItemVisualSelector { get; set; }
-
         /// <summary>
         /// Intializes a new instance of the <see cref="Timeline"/> class.
         /// </summary>

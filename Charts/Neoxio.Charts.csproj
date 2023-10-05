@@ -1,8 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
 	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFrameworks Condition="'$(LibraryFrameworks)'==''">net462;net48;netcoreapp3.1;net6.0-windows</TargetFrameworks>
+		<TargetFrameworks Condition="'$(LibraryFrameworks)'!=''">$(LibraryFrameworks)</TargetFrameworks>
 		<UseWPF>true</UseWPF>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>Neoxio.Charts.snk</AssemblyOriginatorKeyFile>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.1</FileVersion>
+		<Authors>Neoxio</Authors>
+		<Company>Neoxio</Company>
+		<Product>Neoxio.Charts</Product>
+		<Description>Neoxio.Charts is a data visualization library for .NET. This package targets WPF applications.</Description>
+		<Copyright>Copyright © Neoxio 2022</Copyright>
+		<Title>Neoxio.Charts</Title>
+		<!-- Package -->
+		<PackageId>Neoxio.Charts</PackageId>
+		<PackageTags>chart;plot;data visualization;timeline;line;time range;wpf</PackageTags>
+		<PackageIcon>PackageIcon.png</PackageIcon>
+		<PackageProjectUrl>https://github.com/Neoxio/Charts</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\Resources\Images\PackageIcon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>
