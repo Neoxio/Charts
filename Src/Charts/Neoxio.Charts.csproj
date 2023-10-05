@@ -20,11 +20,11 @@
 		<PackageIcon>PackageIcon.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/Neoxio/Charts</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\Resources\Images\PackageIcon.png" Pack="true" PackagePath="\" />
+		<None Include="..\..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+		<None Include="..\..\Resources\Images\PackageIcon.png" Pack="true" PackagePath="\" Visible="false" />
 	</ItemGroup>
 
 </Project>
